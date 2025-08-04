@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<!-- saved from url=(0037)file:///home/react-rise/clp/test.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kegelix - Персонализированный план</title>
+    <link rel="stylesheet" href="./Kegelix - Персонализированный план_files/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: #121821;
+            color: #FFFFFF;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .container {
+            max-width: 393px;
+            margin: 0 auto;
+            position: relative;
+            padding-bottom: 40px;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            background: rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            width: 393px;
+            z-index: 100;
+        }
+
+        .time {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 5px;
+        }
+
+        /* Header */
+        .header {
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 44px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .app-icon {
+            width: 40px;
+            height: 40px;
+            background: #F1FD5F;
+            border-radius: 9px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #121821;
+            font-weight: 800;
+        }
+
+        .app-name {
+            font-weight: 800;
+            font-size: 17px;
+        }
+
+        .cta-button {
+            background: #F1FD5F;
+            border-radius: 32px;
+            padding: 10px 20px;
+            font-weight: 600;
+            color: #0C0E12;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            padding: 20px 16px;
+        }
+
+        .comparison-container {
+            display: flex;
+            height: 387px;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .comparison-half {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .comparison-left {
+            background: linear-gradient(180deg, #3A3B4B 0%, #2A2B3A 100%);
+        }
+
+        .comparison-right {
+            background: linear-gradient(180deg, #4C1FE3 0%, #2A2B3A 100%);
+        }
+
+        .divider {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: #D7D7D7;
+        }
+
+        .status-indicator {
+            position: absolute;
+            bottom: 30px;
+            padding: 3px 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .now-indicator {
+            background: #D7D7D7;
+            color: #0C0E12;
+            left: 25%;
+            transform: translateX(-50%);
+        }
+
+        .goal-indicator {
+            background: #F1FD5F;
+            border: 1px solid #D0DA53;
+            color: #1C2534;
+            left: 75%;
+            transform: translateX(-50%);
+        }
+
+        .arrow-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            background: #4C1FE3;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+        }
+
+        /* Metrics Section */
+        .metrics-section {
+            background: #2A2B3A;
+            padding: 20px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .metric-category {
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .metric-value {
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .metric-bar-container {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .metric-bar {
+            height: 5px;
+            background: #727183;
+            border-radius: 16px;
+            flex: 1;
+        }
+
+        .metric-bar.active {
+            background: #F1FD5F;
+        }
+
+        .metric-dot {
+            position: absolute;
+            width: 11px;
+            height: 11px;
+            background: #FFFFFF;
+            border-radius: 50%;
+            margin-top: -3px;
+        }
+
+        .metric-dot::after {
+            content: '';
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            left: 3px;
+            top: 3px;
+            background: #4C20E2;
+            border-radius: 50%;
+        }
+
+        .metric-row {
+            position: relative;
+        }
+
+        /* Personalized Plan */
+        .personalized-plan {
+            padding: 40px 16px 20px;
+            text-align: center;
+        }
+
+        .section-title {
+            font-weight: 600;
+            font-size: 24px;
+            margin-bottom: 24px;
+        }
+
+        .plan-details {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            justify-content: center;
+        }
+
+        .plan-detail-box {
+            border: 1px solid #2A2B3A;
+            border-radius: 8px;
+            padding: 8px 12px;
+            width: 175px;
+            text-align: left;
+        }
+
+        .plan-detail-label {
+            font-weight: 700;
+            font-size: 12px;
+            color: #9FA7AF;
+        }
+
+        .plan-detail-value {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .discount-banner {
+            background: #2A2B3A;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .discount-content {
+            border: 1px solid #40414A;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .discount-icon {
+            color: #F1FD5F;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .discount-text {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .timer-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .timer-box {
+            background: #04040B;
+            border-radius: 5px;
+            padding: 2px 10px;
+            flex: 1;
+        }
+
+        .code-box {
+            background: #0E0E0E;
+            border-radius: 5px;
+            padding: 2px 10px;
+            flex: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .timer-text, .code-text {
+            font-family: 'Gilroy', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            color: #FFFFFF;
+        }
+
+        .dashed-divider {
+            height: 1px;
+            border-top: 1px dashed #40414A;
+            margin: 30px 0;
+        }
+
+        /* Subscription Plans */
+        .subscription-plans {
+            margin-bottom: 24px;
+        }
+
+        .plan-option {
+            background: #2A2B3A;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 12px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .plan-option:hover {
+            transform: translateY(-2px);
+        }
+
+        .popular-plan {
+            border: 1px solid #F1FD5F;
+            border-top: none;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -26px;
+            left: 0;
+            width: 100%;
+            background: #F1FD5F;
+            border-radius: 20px 20px 0 0;
+            padding: 4px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 12px;
+            color: #111111;
+        }
+
+        .radio-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #727183;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .selected .radio-icon {
+            background: #F1FD5F;
+        }
+
+        .selected .radio-icon::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: #121821;
+            border-radius: 50%;
+        }
+
+        .plan-info {
+            flex: 1;
+        }
+
+        .plan-name {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .plan-price {
+            font-weight: 400;
+            font-size: 14px;
+            color: #9FA7AF;
+        }
+
+        .plan-cost {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .selected .plan-cost {
+            color: #F1FD5F;
+        }
+
+        /* Payment Section */
+        .payment-section {
+            margin-top: 24px;
+        }
+
+        .get-plan-button {
+            background: #F1FD5F;
+            border-radius: 32px;
+            padding: 16px;
+            width: 100%;
+            border: none;
+            font-weight: 800;
+            font-size: 17px;
+            color: #0C0E12;
+            cursor: pointer;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .get-plan-button:hover {
+            background: #e0ea50;
+            transform: translateY(-2px);
+        }
+
+        .terms {
+            font-weight: 600;
+            font-size: 12px;
+            line-height: 1.6;
+            text-align: center;
+            color: #9FA7AF;
+            margin-bottom: 16px;
+        }
+
+        .secure-payment {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(241, 253, 95, 0.1);
+            border-radius: 8px;
+            padding: 4px 12px;
+            margin: 0 auto 16px;
+        }
+
+        .secure-text {
+            font-weight: 600;
+            font-size: 12px;
+            color: #F1FD5F;
+        }
+
+        .payment-methods {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .payment-method {
+            width: 42px;
+            height: 28px;
+            background: #FFFFFF;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 9px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* Why Choose Section */
+        .why-choose {
+            padding: 40px 16px;
+            text-align: center;
+        }
+
+        .section-title {
+            margin-bottom: 24px;
+        }
+
+        .benefits {
+            text-align: left;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 1.8;
+            color: #CCCCCC;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .featured-in {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .featured-title {
+            font-weight: 600;
+            font-size: 12px;
+            margin-bottom: 13px;
+        }
+
+        .featured-subtitle {
+            font-weight: 600;
+            font-size: 24px;
+            margin-bottom: 24px;
+        }
+
+        .logos-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .logo-placeholder {
+            width: 100px;
+            height: 30px;
+            background: #99A0B2;
+            border-radius: 4px;
+        }
+
+        .press-logos {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        /* Results Section */
+        .results {
+            padding: 40px 16px;
+            text-align: center;
+            background: linear-gradient(180deg, #1a1c25 0%, #121821 100%);
+        }
+
+        .results-title {
+            font-weight: 600;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .results-subtitle {
+            font-weight: 600;
+            font-size: 24px;
+            color: #F1FD5F;
+            margin-bottom: 40px;
+        }
+
+        .stats-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .stat {
+            position: relative;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            font-size: 32px;
+            color: #F1FD5F;
+            margin-bottom: 10px;
+        }
+
+        .stat-description {
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #CCCCCC;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        /* Comparison Sections */
+        .comparison-section-container {
+            padding: 40px 16px;
+        }
+
+        .comparison-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .comparison-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        .comparison-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .icon-container {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .cross-icon {
+            color: #9FA7AF;
+        }
+
+        .check-icon {
+            color: #F1FD5F;
+        }
+
+        .comparison-text {
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #CCCCCC;
+        }
+
+        /* Award Section */
+        .award-section {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #2A2B3A;
+            border-radius: 16px;
+            padding: 16px;
+            margin: 30px 16px;
+        }
+
+        .award-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(0deg, #DBA73E -0.02%, #D89D3A 15.99%, #A46B28 29.99%, #8E5723 46%, #F4F3B8 49%, #F7ED9A 56%, #D5B767 69.01%, #A76F29 75.01%, #D0AB5B 85.01%, #E0C77D 100.02%);
+            border-radius: 8px;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #121821;
+            font-size: 24px;
+        }
+
+        .award-text {
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #CCCCCC;
+        }
+
+        /* FAQ Section */
+        .faq {
+            padding: 40px 16px;
+        }
+
+        .faq-title {
+            font-weight: 600;
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .faq-item {
+            margin-bottom: 24px;
+        }
+
+        .faq-question {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .faq-q-icon {
+            color: #F1FD5F;
+            font-size: 20px;
+            margin-top: 3px;
+        }
+
+        .faq-q-text {
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .faq-answer {
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #CCCCCC;
+            padding-left: 30px;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 40px 16px;
+            background: linear-gradient(180deg, #1a1c25 0%, #121821 100%);
+        }
+
+        .testimonials-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .testimonials-title {
+            font-weight: 600;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .testimonials-subtitle {
+            font-weight: 400;
+            font-size: 14px;
+            color: #9FA7AF;
+        }
+
+        .testimonial-card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .rating {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+
+        .star {
+            color: #FFD911;
+        }
+
+        .testimonial-title {
+            font-weight: 600;
+            font-size: 16px;
+            color: #272C36;
+            margin-bottom: 8px;
+        }
+
+        .testimonial-text {
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #727183;
+            margin-bottom: 16px;
+        }
+
+        .testimonial-divider {
+            height: 1px;
+            background: #E4E4E4;
+            margin-bottom: 12px;
+        }
+
+        .testimonial-author {
+            font-weight: 700;
+            font-size: 16px;
+            color: #16151A;
+        }
+
+        /* Guarantee Section */
+        .guarantee {
+            background: #2A2B3A;
+            border-radius: 16px;
+            padding: 24px 16px;
+            margin: 40px 16px 24px;
+            text-align: center;
+        }
+
+        .guarantee-icon {
+            width: 65px;
+            height: 65px;
+            background: #F1FD5F;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 16px;
+            color: #121821;
+            font-size: 24px;
+        }
+
+        .guarantee-title {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .guarantee-text {
+            font-weight: 700;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #9FA7AF;
+        }
+
+        .company-info {
+            font-weight: 700;
+            font-size: 10px;
+            line-height: 1.6;
+            color: #9FA7AF;
+            text-align: center;
+            padding: 0 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        
+        
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div class="app-icon"><img src="./Kegelix - Персонализированный план_files/logo.svg"></div>
+                <div class="app-name">Kegelix</div>
+            </div>
+            <button class="cta-button">GET MY PLAN</button>
+        </div>
+        
+        <!-- Bladder Control Comparison -->
+        <div class="comparison-section">
+            <div class="comparison-container">
+                <div class="comparison-half comparison-left"></div>
+                <div class="comparison-half comparison-right"></div>
+                <div class="divider"></div>
+                <div class="status-indicator now-indicator">Now</div>
+                <div class="status-indicator goal-indicator">Your Goal</div>
+                <div class="arrow-icon">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Metrics Section -->
+        <div class="metrics-section">
+            <div class="metrics-grid">
+                <div class="metric-row">
+                    <div class="metric-category">Energy level</div>
+                    <div class="metric-value">Low</div>
+                    <div class="metric-bar-container">
+                        <div class="metric-bar active"></div>
+                        <div class="metric-bar"></div>
+                        <div class="metric-bar"></div>
+                    </div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-category">Energy level</div>
+                    <div class="metric-value">High</div>
+                    <div class="metric-bar-container">
+                        <div class="metric-bar active"></div>
+                        <div class="metric-bar active"></div>
+                        <div class="metric-bar active"></div>
+                    </div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-category">Bladder control</div>
+                    <div class="metric-value">Low</div>
+                    <div class="metric-bar-container">
+                        <div class="metric-bar active"></div>
+                        <div class="metric-bar"></div>
+                        <div class="metric-bar"></div>
+                    </div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-category">Bladder control</div>
+                    <div class="metric-value">Low</div>
+                    <div class="metric-bar-container">
+                        <div class="metric-bar active"></div>
+                        <div class="metric-bar active"></div>
+                        <div class="metric-bar active"></div>
+                    </div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-category">Intimacy confidence</div>
+                    <div class="metric-value">Low</div>
+                    <div class="metric-bar-container">
+                        <div class="metric-bar active" style="width: 30%"></div>
+                        <div class="metric-bar" style="flex: 1"></div>
+                    </div>
+                </div>
+                <div class="metric-row">
+                    <div class="metric-category">Intimacy confidence</div>
+                    <div class="metric-value">High</div>
+                    <div class="metric-bar-container">
+                        <div class="metric-bar active" style="width: 85%"></div>
+                        <div class="metric-bar" style="flex: 1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Personalized Plan Section -->
+        <div class="personalized-plan">
+            <h2 class="section-title">Your personalized plan is ready!</h2>
+            
+            <div class="plan-details">
+                <div class="plan-detail-box">
+                    <div class="plan-detail-label">Main difficulty</div>
+                    <div class="plan-detail-value">🧠 Staying consistent</div>
+                </div>
+                <div class="plan-detail-box">
+                    <div class="plan-detail-label">Goal</div>
+                    <div class="plan-detail-value">🎯 Full Control</div>
+                </div>
+            </div>
+            
+            <div class="discount-banner">
+                <div class="discount-content">
+                    <div class="discount-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="discount-text">Your discount is valid for 5 minutes.<br>Then your girlfriend will disappear</div>
+                    
+                    <div class="timer-container">
+                        <div class="timer-box">
+                            <span class="timer-text">00:00</span>
+                        </div>
+                        <div class="code-box">
+                            <i class="fas fa-check"></i>
+                            <span class="code-text">CODE312</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashed-divider"></div>
+            
+            <div class="subscription-plans">
+                <div class="plan-option">
+                    <div class="radio-icon"></div>
+                    <div class="plan-info">
+                        <div class="plan-name">7-DAY PLAN</div>
+                        <div class="plan-price">$49 $7.14 per day</div>
+                    </div>
+                    <div class="plan-cost">$7.14</div>
+                </div>
+                
+                <div class="plan-option popular-plan selected">
+                    <div class="popular-badge">MOST POPULAR</div>
+                    <div class="radio-icon"></div>
+                    <div class="plan-info">
+                        <div class="plan-name">1-MONTH PLAN</div>
+                        <div class="plan-price">$49.99 $1.66 per day</div>
+                    </div>
+                    <div class="plan-cost">$1.66</div>
+                </div>
+                
+                <div class="plan-option">
+                    <div class="radio-icon"></div>
+                    <div class="plan-info">
+                        <div class="plan-name">3-MONTH PLAN</div>
+                        <div class="plan-price">$99.99 $1.11 per day</div>
+                    </div>
+                    <div class="plan-cost">$1.11</div>
+                </div>
+            </div>
+            
+            <div class="payment-section">
+                <button class="get-plan-button">GET MY PLAN</button>
+                
+                <div class="terms">
+                    By clicking "Get My Plan", you agree to automatic subscription renewal. First month is €49.99, then €49.99/month(prices incl. VAT). Cancel via the app or email: support@theliven.com. See Subscription Policy for details.
+                </div>
+                
+                <div class="secure-payment">
+                    <i class="fas fa-shield-alt"></i>
+                    <span class="secure-text">Pay Safe &amp; Secure</span>
+                </div>
+                
+                <div class="payment-methods">
+                    <div class="payment-method">PP</div>
+                    <div class="payment-method">AM</div>
+                    <div class="payment-method">MC</div>
+                    <div class="payment-method">AP</div>
+                    <div class="payment-method">VS</div>
+                    <div class="payment-method">DS</div>
+                    <div class="payment-method">VISA</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Why Choose Section -->
+        <div class="why-choose">
+            <h2 class="section-title">Why men choose it</h2>
+            
+            <div class="benefits">
+                <div class="benefit-item">
+                    <span>🧠</span>
+                    <span>Smart daily reminders that fit your schedule</span>
+                </div>
+                <div class="benefit-item">
+                    <span>🕐</span>
+                    <span>Fast 5-minute routines, no equipment needed</span>
+                </div>
+                <div class="benefit-item">
+                    <span>✨</span>
+                    <span>Better bladder control &amp; core strength in weeks</span>
+                </div>
+                <div class="benefit-item">
+                    <span>🧔</span>
+                    <span>Prostate/post-surgery friendly guidance</span>
+                </div>
+                <div class="benefit-item">
+                    <span>🔒</span>
+                    <span>100% private &amp; discreet — no awkward visits</span>
+                </div>
+                <div class="benefit-item">
+                    <span>📈</span>
+                    <span>Clear progress stats, streaks, and wins</span>
+                </div>
+            </div>
+            
+            <div class="featured-in">
+                <div class="featured-title">our program is based on methodology</div>
+                <div class="featured-subtitle">As featured in</div>
+                
+                <div class="logos-container">
+                    <div class="logo-placeholder"></div>
+                    <div class="logo-placeholder"></div>
+                </div>
+                
+                <div class="press-logos">
+                    <div class="logo-placeholder" style="width: 60px;"></div>
+                    <div class="logo-placeholder" style="width: 60px;"></div>
+                    <div class="logo-placeholder" style="width: 60px;"></div>
+                    <div class="logo-placeholder" style="width: 60px;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div class="results">
+            <h2 class="results-title">Men just like you achieved</h2>
+            <h2 class="results-subtitle">great results with our Pelvic-Floor Power Plan!</h2>
+            
+            <div class="stats-container">
+                <div class="stat">
+                    <div class="stat-value">85%</div>
+                    <div class="stat-description">Of Users Regained Full Bladder Control In Just 6 Weeks</div>
+                </div>
+                
+                <div class="stat">
+                    <div class="stat-value">78%</div>
+                    <div class="stat-description">Started With The Same Issues You Have Today</div>
+                </div>
+                
+                <div class="stat">
+                    <div class="stat-value">52%</div>
+                    <div class="stat-description">Reported Stronger Core &amp; More Confidence In Intimacy</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Comparison Sections -->
+        <div class="comparison-section-container">
+            <div class="comparison-box">
+                <h3 class="comparison-title">Life without [AppName]</h3>
+                
+                <div class="comparison-item">
+                    <div class="icon-container">
+                        <i class="fas fa-times cross-icon"></i>
+                    </div>
+                    <div class="comparison-text">Feeling anxious about sudden leaks or urges</div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="icon-container">
+                        <i class="fas fa-times cross-icon"></i>
+                    </div>
+                    <div class="comparison-text">Cutting workouts short because of bladder worries</div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="icon-container">
+                        <i class="fas fa-times cross-icon"></i>
+                    </div>
+                    <div class="comparison-text">Low confidence in intimate moments</div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="icon-container">
+                        <i class="fas fa-times cross-icon"></i>
+                    </div>
+                    <div class="comparison-text">Rushing to the restroom during meetings or commutes</div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="icon-container">
+                        <i class="fas fa-times cross-icon"></i>
+                    </div>
+                    <div class="comparison-text">Skipping pelvic-floor training because it feels awkward</div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="icon-container">
+                        <i class="fas fa-times cross-icon"></i>
+                    </div>
+                    <div class="comparison-text">No clear progress-tracking, so motivation fades</div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="icon-container">
+                        <i class="fas fa-times cross-icon"></i>
+                    </div>
+                    <div class="comparison-text">Tired core and poor posture by the end of the day</div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="icon-container">
+                        <i class="fas fa-times cross-icon"></i>
+                    </div>
+                    <div class="comparison-text">Stress and self-doubt piling up</div>
+                </div>
+            </div>
+            
+            <div class="comparison-box">
+                <h3 class="comparison-title">What [AppName] can help you with</h3>
+                
+                <div class="comparison-item">
+                    <div class="icon-container">
+                        <i class="fas fa-check check-icon"></i>
+                    </div>
+                    <div class="comparison-text">Continuous bladder control &amp; confidence</div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="icon-container">
+                        <i class="fas fa-check check-icon"></i>
+                    </div>
+                    <div class="comparison-text">Stronger pelvic-floor muscles in just minutes a day</div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="icon-container">
+                        <i class="fas fa-check check-icon"></i>
+                    </div>
+                    <div class="comparison-text">Higher stamina and ease during workouts &amp; coughing</div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="icon-container">
+                        <i class="fas fa-check check-icon"></i>
+                    </div>
+                    <div class="comparison-text">Greater assurance in intimate life</div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="icon-container">
+                        <i class="fas fa-check check-icon"></i>
+                    </div>
+                    <div class="comparison-text">Clear progress streaks that keep you motivated</div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="icon-container">
+                        <i class="fas fa-check check-icon"></i>
+                    </div>
+                    <div class="comparison-text">Smart reminders—no guilt for missing a session</div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="icon-container">
+                        <i class="fas fa-check check-icon"></i>
+                    </div>
+                    <div class="comparison-text">Better posture and core stability throughout the day</div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="icon-container">
+                        <i class="fas fa-check check-icon"></i>
+                    </div>
+                    <div class="comparison-text">Lower stress and a boost in self-esteem</div>
+                </div>
+            </div>
+            
+            <div class="award-section">
+                <div class="award-icon">🏆</div>
+                <div class="award-text">Proudly nominated for the International Digital Well-Being Innovation Award 2023</div>
+            </div>
+        </div>
+        
+        <!-- FAQ Section -->
+        <div class="faq">
+            <h2 class="faq-title">People often ask</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i class="fas fa-question-circle faq-q-icon"></i>
+                    <div class="faq-q-text">What if I don't have enough willpower to stick to the plan?</div>
+                </div>
+                <div class="faq-answer">
+                    Our sessions take just 5 minutes and come with smart reminders, so you build the habit gradually without forcing yourself. Streaks and in-app milestones keep motivation high.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i class="fas fa-question-circle faq-q-icon"></i>
+                    <div class="faq-q-text">What if I have too many distractions in my life?</div>
+                </div>
+                <div class="faq-answer">
+                    Schedule sessions for the time of day when you're least busy; silent-mode reminders keep you on track without interrupting work or family time.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i class="fas fa-question-circle faq-q-icon"></i>
+                    <div class="faq-q-text">What if I feel overwhelmed about starting this plan?</div>
+                </div>
+                <div class="faq-answer">
+                    The program starts with very light exercises and ramps up only when you're ready. Step-by-step animations and clear in-app guidance make every move doable.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <i class="fas fa-question-circle faq-q-icon"></i>
+                    <div class="faq-q-text">What if I've tried other tools and they haven't worked for me?</div>
+                </div>
+                <div class="faq-answer">
+                    Unlike generic fitness apps, we focus solely on men's pelvic-floor strength. The algorithm adapts to your progress, giving you personalized levels and tips based on the latest research—no extra coaching needed.
+                </div>
+            </div>
+        </div>
+        
+        <!-- Testimonials Section -->
+        <div class="testimonials">
+            <div class="testimonials-header">
+                <h2 class="testimonials-title">Users love our Kegel plan</h2>
+                <div class="testimonials-subtitle">Here's what men are saying about [AppName]</div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="rating">
+                    <i class="fas fa-star star"></i>
+                    <i class="fas fa-star star"></i>
+                    <i class="fas fa-star star"></i>
+                    <i class="fas fa-star star"></i>
+                    <i class="fas fa-star star"></i>
+                </div>
+                <h3 class="testimonial-title">No more leaks—huge relief</h3>
+                <p class="testimonial-text">After just five weeks the urgent runs to the bathroom stopped. Five-minute sessions are easy to stick to, and my confidence—especially with my partner—shot up.</p>
+                <div class="testimonial-divider"></div>
+                <div class="testimonial-author">Mark S.</div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="rating">
+                    <i class="fas fa-star star"></i>
+                    <i class="fas fa-star star"></i>
+                    <i class="fas fa-star star"></i>
+                    <i class="fas fa-star star"></i>
+                    <i class="fas fa-star star"></i>
+                </div>
+                <h3 class="testimonial-title">Gym &amp; bedroom confidence back</h3>
+                <p class="testimonial-text">I can deadlift without worrying and feel stronger during intimacy too. The streak tracker keeps me motivated every day.</p>
+                <div class="testimonial-divider"></div>
+                <div class="testimonial-author">Antonio L.</div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="rating">
+                    <i class="fas fa-star star"></i>
+                    <i class="fas fa-star star"></i>
+                    <i class="fas fa-star star"></i>
+                    <i class="fas fa-star star"></i>
+                    <i class="fas fa-star star"></i>
+                </div>
+                <h3 class="testimonial-title">Worth every minute</h3>
+                <p class="testimonial-text">I'm 58 and thought improvement was impossible. Two months in—steady stream, better posture, and my wife noticed the difference first!</p>
+                <div class="testimonial-divider"></div>
+                <div class="testimonial-author">Richard K.</div>
+            </div>
+        </div>
+        
+        <!-- Final CTA Section -->
+        <div class="personalized-plan">
+            <h2 class="section-title">Your personalized plan is ready!</h2>
+            
+            <div class="plan-details">
+                <div class="plan-detail-box">
+                    <div class="plan-detail-label">Main difficulty</div>
+                    <div class="plan-detail-value">🧠 Staying consistent</div>
+                </div>
+                <div class="plan-detail-box">
+                    <div class="plan-detail-label">Goal</div>
+                    <div class="plan-detail-value">🎯 Full Control</div>
+                </div>
+            </div>
+            
+            <div class="discount-banner">
+                <div class="discount-content">
+                    <div class="discount-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="discount-text">Your discount is valid for 5 minutes.<br>Then your girlfriend will disappear</div>
+                    
+                    <div class="timer-container">
+                        <div class="timer-box">
+                            <span class="timer-text">00:00</span>
+                        </div>
+                        <div class="code-box">
+                            <i class="fas fa-check"></i>
+                            <span class="code-text">CODE312</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashed-divider"></div>
+            
+            <div class="subscription-plans">
+                <div class="plan-option">
+                    <div class="radio-icon"></div>
+                    <div class="plan-info">
+                        <div class="plan-name">7-DAY PLAN</div>
+                        <div class="plan-price">$49 $7.14 per day</div>
+                    </div>
+                    <div class="plan-cost">$7.14</div>
+                </div>
+                
+                <div class="plan-option popular-plan selected">
+                    <div class="popular-badge">MOST POPULAR</div>
+                    <div class="radio-icon"></div>
+                    <div class="plan-info">
+                        <div class="plan-name">1-MONTH PLAN</div>
+                        <div class="plan-price">$49.99 $1.66 per day</div>
+                    </div>
+                    <div class="plan-cost">$1.66</div>
+                </div>
+                
+                <div class="plan-option">
+                    <div class="radio-icon"></div>
+                    <div class="plan-info">
+                        <div class="plan-name">3-MONTH PLAN</div>
+                        <div class="plan-price">$99.99 $1.11 per day</div>
+                    </div>
+                    <div class="plan-cost">$1.11</div>
+                </div>
+            </div>
+            
+            <div class="payment-section">
+                <button class="get-plan-button">GET MY PLAN</button>
+                
+                <div class="terms">
+                    By clicking "Get My Plan", you agree to automatic subscription renewal. First month is €49.99, then €49.99/month(prices incl. VAT). Cancel via the app or email: support@theliven.com. See Subscription Policy for details.
+                </div>
+                
+                <div class="secure-payment">
+                    <i class="fas fa-shield-alt"></i>
+                    <span class="secure-text">Pay Safe &amp; Secure</span>
+                </div>
+                
+                <div class="payment-methods">
+                    <div class="payment-method">PP</div>
+                    <div class="payment-method">AM</div>
+                    <div class="payment-method">MC</div>
+                    <div class="payment-method">AP</div>
+                    <div class="payment-method">VS</div>
+                    <div class="payment-method">DS</div>
+                    <div class="payment-method">VISA</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Guarantee Section -->
+        <div class="guarantee">
+            <div class="guarantee-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="guarantee-title">30-Day Money-Back Guarantee</div>
+            <div class="guarantee-text">
+                Our plan is backed by a money-back guarantee. We believe that our plan will work for you, that we guarantee a full refund within 30 days after purchase if you don't see visible results in your ability to reduce negative effects despite following your plan as directed. Find more about applicable limitations in our money-back policy.
+            </div>
+        </div>
+        
+        <div class="company-info">
+            Chesmint Limited, Lekorpouzier 12a, Limassol, 3075, Cyprus
+        </div>
+    </div>
+
+    <script>
+        // Timer countdown functionality
+        let minutes = 5;
+        let seconds = 0;
+        const timerElement = document.querySelector('.timer-text');
+        
+        function updateTimer() {
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (minutes === 0 && seconds === 0) {
+                clearInterval(timerInterval);
+            } else {
+                if (seconds === 0) {
+                    minutes--;
+                    seconds = 59;
+                } else {
+                    seconds--;
+                }
+            }
+        }
+        
+        const timerInterval = setInterval(updateTimer, 1000);
+        
+        // Plan selection functionality
+        const planOptions = document.querySelectorAll('.plan-option');
+        
+        planOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                // Remove selected class from all options
+                planOptions.forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // Add selected class to clicked option
+                option.classList.add('selected');
+            });
+        });
+        
+        // Get Plan button functionality
+        const getPlanButtons = document.querySelectorAll('.get-plan-button');
+        
+        getPlanButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                alert('Redirecting to payment page...');
+                // In a real implementation, this would redirect to a payment page
+            });
+        });
+    </script>
+
+</body></html>
